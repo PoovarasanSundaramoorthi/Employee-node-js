@@ -82,29 +82,41 @@ export async function createEmployeeSalary(req, res, next) {
 }
 
 export async function EmpYearSalaryDetails(req, res, next) {
-  const data = req.query;
-  const details = await EmployeeSalary.find({ employeeId: data.employeeId, year: data.year });
+  try {
+    const data = req.query;
+    const details = await EmployeeSalary.find({ employeeId: data.employeeId, year: data.year });
 
-  res.status(200).json({
-    success: true,
-    message: 'Year Salary details saved successfully',
-    year: details,
-  });
+    res.status(200).json({
+      success: true,
+      message: 'Year Salary details saved successfully',
+      year: details,
+    });
+  }
+  catch (error) {
+    next(error)
+  }
+
 }
+
 export async function EmpDateBasedSalaryFilter(req, res, next) {
-  const data = req.query;
-  const details = await EmployeeSalary.find({ employeeId: data.employeeId });
+  try {
+    const data = req.query;
+    const details = await EmployeeSalary.find({ employeeId: data.employeeId });
 
-  const filteredData = details.filter((item) => {
-    const { year, month } = item;
-    return (year === data?.fromYear && month >= data.fromMonth) || (year === data?.toYear && month <= data.toMonth);
-  });
+    const filteredData = details.filter((item) => {
+      const { year, month } = item;
+      return (year === data?.fromYear && month >= data.fromMonth) || (year === data?.toYear && month <= data.toMonth);
+    });
 
-  res.status(200).json({
-    success: true,
-    message: 'Year Salary details saved successfully',
-    data: filteredData,
-  });
+    res.status(200).json({
+      success: true,
+      message: 'Year Salary details saved successfully',
+      data: filteredData,
+    });
+  } catch (error) {
+    next(error)
+  }
+
 }
 
 
